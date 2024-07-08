@@ -183,3 +183,6 @@ TODO List
 We appreciate any feedback so reporting problems, and asking questions are welcomed here.
 
 Licensed under [MIT License](LICENSE)
+
+## Acknowledgement
+* [UNet 3+: A Full-Scale Connected UNet for Medical Image Segmentation](https://arxiv.org/abs/2004.08790)
