@@ -106,7 +106,7 @@ def train(cfg: DictConfig):
             batch_images, batch_masks = batch_images.to(device), batch_masks.to(device)
             optimizer.zero_grad()
             outputs = model(batch_images)
-            loss = criterion(outputs, batch_masks)
+            loss = criterion(batch_masks, outputs)
             loss.backward()
             optimizer.step()
             train_loss += loss.item() * batch_images.size(0)

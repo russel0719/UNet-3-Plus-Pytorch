@@ -110,13 +110,14 @@ class UNet3Plus(nn.Module):
         ])
         self.d1_conv = ConvBlock(self.upsample_channels, self.upsample_channels, n=1)
 
-        self.final = nn.Conv2d(self.upsample_channels, output_channels, kernel_size=1) if not self.deep_supervision else None
+        self.final = nn.Conv2d(self.upsample_channels, output_channels, kernel_size=1)
 
         # Deep Supervision
         self.deep_sup = nn.ModuleList([
-            ConvBlock(self.upsample_channels, output_channels, n=1, is_bn=False, is_relu=False)
-            for _ in range(5)
-        ]) if self.deep_supervision else None
+                ConvBlock(self.upsample_channels, output_channels, n=1, is_bn=False, is_relu=False)
+                for _ in range(3)
+            ] + [ConvBlock(self.filters[4], output_channels, n=1, is_bn=False, is_relu=False)]
+        ) if self.deep_supervision else None
 
     def forward(self, x) -> torch.Tensor:
         training = self.training
@@ -176,15 +177,17 @@ class UNet3Plus(nn.Module):
         d1 = [conv(d) for conv, d in zip(self.d1, d1)]
         d1 = torch.cat(d1, dim=1)
         d1 = self.d1_conv(d1)
+        d1 = self.final(d1)
+
+        outputs = [F.softmax(d1, dim=1)]
 
         # Deep Supervision
-        outputs = [self.deep_sup[0](d1)] if self.deep_supervision else [F.softmax(self.final(d1), dim=1)]
-        if self.deep_sup and self.CGM and training:
+        if self.deep_supervision and training:
             outputs.extend([
-                F.interpolate(self.deep_sup[1](d2), scale_factor=2, mode='bilinear', align_corners=True),
-                F.interpolate(self.deep_sup[2](d3), scale_factor=4, mode='bilinear', align_corners=True),
-                F.interpolate(self.deep_sup[3](d4), scale_factor=8, mode='bilinear', align_corners=True),
-                F.interpolate(self.deep_sup[4](e5), scale_factor=16, mode='bilinear', align_corners=True)
+                F.softmax(F.interpolate(self.deep_sup[0](d2), scale_factor=2, mode='bilinear', align_corners=True), dim=1),
+                F.softmax(F.interpolate(self.deep_sup[1](d3), scale_factor=4, mode='bilinear', align_corners=True), dim=1),
+                F.softmax(F.interpolate(self.deep_sup[2](d4), scale_factor=8, mode='bilinear', align_corners=True), dim=1),
+                F.softmax(F.interpolate(self.deep_sup[3](e5), scale_factor=16, mode='bilinear', align_corners=True), dim=1)
             ])
 
         # Classification Guided Module
@@ -195,22 +198,22 @@ class UNet3Plus(nn.Module):
         if self.CGM:
             outputs.append(cls)
         
-        if (self.deep_supervision or self.CGM) and training:
-            return outputs
+        if self.deep_supervision and training:
+            return torch.mean(torch.stack(outputs[:5]), dim=0)
         else:
             return outputs[0]
 
 if __name__ == "__main__":
     INPUT_SHAPE = [1, 320, 320]
-    OUTPUT_CHANNELS = 1
+    OUTPUT_CHANNELS = 2
 
-    unet_3P = UNet3Plus(INPUT_SHAPE, OUTPUT_CHANNELS, deep_supervision=False, CGM=False)
-    unet_3P_deep_sup = UNet3Plus(INPUT_SHAPE, OUTPUT_CHANNELS, deep_supervision=True, CGM=False)
-    unet_3P_deep_sup_cgm = UNet3Plus(INPUT_SHAPE, OUTPUT_CHANNELS, deep_supervision=True, CGM=True)
-    print(unet_3P)
+    unet_3P = UNet3Plus(INPUT_SHAPE, OUTPUT_CHANNELS, deep_supervision=False, cgm=False, training=True)
+    unet_3P_deep_sup = UNet3Plus(INPUT_SHAPE, OUTPUT_CHANNELS, deep_supervision=True, cgm=False, training=True)
+    unet_3P_deep_sup_cgm = UNet3Plus(INPUT_SHAPE, OUTPUT_CHANNELS, deep_supervision=True, cgm=True, training=True)
+    # print(unet_3P)
 
     # Example input tensor
-    x = torch.randn(1, *INPUT_SHAPE)
+    x = torch.randn(4, *INPUT_SHAPE)
 
     # Forward pass
     output = unet_3P(x)
