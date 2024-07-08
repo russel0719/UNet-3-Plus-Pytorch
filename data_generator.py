@@ -1,12 +1,12 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
 import torch.nn.functional as F
+
 import numpy as np
-import os
 from omegaconf import DictConfig
 
-from utils.general_utils import join_paths, get_data_paths
-from utils.images_utils import prepare_image, prepare_mask, image_to_mask_name
+from utils.general_utils import get_data_paths
+from utils.images_utils import prepare_image, prepare_mask
 
 class DataGenerator(Dataset):
     """

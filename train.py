@@ -1,4 +1,3 @@
-from datetime import datetime
 import hydra
 from omegaconf import DictConfig
 from tqdm import tqdm
@@ -6,7 +5,7 @@ import torch
 from torch import nn, optim
 import torch.backends.cudnn as cudnn
 
-from data_generator import DataGenerator, get_data_loader
+from data_generator import get_data_loader
 from data_preparation.verify_data import verify_data
 from utils.general_utils import create_directory, join_paths, set_gpus, get_gpus_count
 from models.model import prepare_model

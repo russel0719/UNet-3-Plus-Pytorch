@@ -1,8 +1,8 @@
 # UNet 3+ Unofficial Pytorch Implementation
 
-Official Implementation of UNet 3+ github is [github](https://github.com/hamidriasat/UNet-3-Plus)
+This code is Implementation of UNet 3+ in pytorch.
 
-So this code is based on official github implemented with tensorflow
+I refered to Tensorflow Implementation of UNet 3+ [github](https://github.com/hamidriasat/UNet-3-Plus).
 
 ## UNet 3+: A Full-Scale Connected UNet for Medical Image Segmentation [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhamidriasat%2FUNet-3-Plus&count_bg=%2379C83D&title_bg=%23555555&icon=sega.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com) <a href="/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license" /></a>
 
@@ -99,7 +99,7 @@ unet_3P_deep_sup_cgm = UNet3Plus(INPUT_SHAPE, OUTPUT_CHANNELS, deep_supervision=
 
 [Here](/losses/unet_loss.py) you can find UNet3+ hybrid loss.
 
-### Training & Evaluation
+### Training
 
 To train a model call `train.py` with required model type and configurations .
 
@@ -107,14 +107,6 @@ e.g. To train on base model run
 
 ```
 python train.py MODEL.TYPE=unet3plus
-```
-
-To evaluate the trained models call `evaluate.py`.
-
-e.g. To calculate accuracy of trained UNet3+ Base model on validation data run
-
-```
-python evaluate.py MODEL.TYPE=unet3plus
 ```
 
 ### Inference Demo
@@ -185,4 +177,5 @@ We appreciate any feedback so reporting problems, and asking questions are welco
 Licensed under [MIT License](LICENSE)
 
 ## Acknowledgement
-* [UNet 3+: A Full-Scale Connected UNet for Medical Image Segmentation](https://arxiv.org/abs/2004.08790)
+
+-   [UNet 3+: A Full-Scale Connected UNet for Medical Image Segmentation](https://arxiv.org/abs/2004.08790)
