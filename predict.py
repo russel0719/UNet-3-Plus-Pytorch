@@ -74,12 +74,12 @@ def predict(cfg: DictConfig):
             prediction = batch_predictions[index]
             prediction = postprocess_mask(prediction.cpu().numpy())
             # denormalize mask for better visualization
-            prediction = denormalize_mask(prediction, cfg.OUTPUT.CLASSES)
+            prediction = denormalize_mask(prediction, cfg.OUTPUT.CLASSES + 1)
 
             if mask_available:
                 mask = batch_mask[index]
                 mask = postprocess_mask(mask.numpy())
-                mask = denormalize_mask(mask, cfg.OUTPUT.CLASSES-1)
+                mask = denormalize_mask(mask, cfg.OUTPUT.CLASSES)
             
             # if np.unique(mask).shape[0] == 2:
             result_path = join_paths(cfg.WORK_DIR, cfg.RESULT_DIR, f'output_{showed_images}.png')

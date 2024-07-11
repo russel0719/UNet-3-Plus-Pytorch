@@ -16,7 +16,7 @@ def prepare_model(cfg: DictConfig, training=False):
     if cfg.MODEL.TYPE == "tiny_unet3plus":
         return UNet3Plus(
             input_shape,
-            cfg.OUTPUT.CLASSES,
+            cfg.OUTPUT.CLASSES + 1,
             False,
             False,
             training,
@@ -25,7 +25,7 @@ def prepare_model(cfg: DictConfig, training=False):
         #  training parameter does not matter in this case
         return UNet3Plus(
             input_shape,
-            cfg.OUTPUT.CLASSES,
+            cfg.OUTPUT.CLASSES + 1,
             False,
             False,
             training,
@@ -33,7 +33,7 @@ def prepare_model(cfg: DictConfig, training=False):
     elif cfg.MODEL.TYPE == "unet3plus_deepsup":
         return UNet3Plus(
             input_shape,
-            cfg.OUTPUT.CLASSES,
+            cfg.OUTPUT.CLASSES + 1,
             True,
             False,
             training
@@ -46,7 +46,7 @@ def prepare_model(cfg: DictConfig, training=False):
             )
         return UNet3Plus(
             input_shape,
-            cfg.OUTPUT.CLASSES,
+            cfg.OUTPUT.CLASSES + 1,
             True,
             True,
             training

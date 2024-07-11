@@ -110,7 +110,7 @@ class DataGenerator(Dataset):
             if self.mask_available:
                 # convert mask into one hot vectors
                 # height x width --> height x width x output classes
-                mask = F.one_hot(mask, num_classes=self.cfg.OUTPUT.CLASSES).permute(2, 0, 1).float()
+                mask = F.one_hot(mask, num_classes=self.cfg.OUTPUT.CLASSES+1).permute(2, 0, 1).float()
                 self.batch_masks.append(mask)
 
 

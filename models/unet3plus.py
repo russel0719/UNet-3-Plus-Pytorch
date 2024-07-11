@@ -179,27 +179,25 @@ class UNet3Plus(nn.Module):
         d1 = self.d1_conv(d1)
         d1 = self.final(d1)
 
-        outputs = [F.softmax(d1, dim=1)]
+        outputs = [d1]
 
         # Deep Supervision
         if self.deep_supervision and training:
             outputs.extend([
-                F.softmax(F.interpolate(self.deep_sup[0](d2), scale_factor=2, mode='bilinear', align_corners=True), dim=1),
-                F.softmax(F.interpolate(self.deep_sup[1](d3), scale_factor=4, mode='bilinear', align_corners=True), dim=1),
-                F.softmax(F.interpolate(self.deep_sup[2](d4), scale_factor=8, mode='bilinear', align_corners=True), dim=1),
-                F.softmax(F.interpolate(self.deep_sup[3](e5), scale_factor=16, mode='bilinear', align_corners=True), dim=1)
+                F.interpolate(self.deep_sup[0](d2), scale_factor=2, mode='bilinear', align_corners=True),
+                F.interpolate(self.deep_sup[1](d3), scale_factor=4, mode='bilinear', align_corners=True),
+                F.interpolate(self.deep_sup[2](d4), scale_factor=8, mode='bilinear', align_corners=True),
+                F.interpolate(self.deep_sup[3](e5), scale_factor=16, mode='bilinear', align_corners=True)
             ])
 
         # Classification Guided Module
         if self.CGM:
             outputs = [dot_product(out, cls) for out in outputs]
-            outputs = [torch.sigmoid(out) for out in outputs] 
-
-        if self.CGM:
-            outputs.append(cls)
+        
+        outputs = [F.sigmoid(out) for out in outputs]
         
         if self.deep_supervision and training:
-            return torch.mean(torch.stack(outputs[:5]), dim=0)
+            return torch.cat(outputs, dim=0)
         else:
             return outputs[0]
 

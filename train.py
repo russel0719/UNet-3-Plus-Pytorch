@@ -37,13 +37,6 @@ def train(cfg: DictConfig):
     print("Verifying data ...")
     verify_data(cfg)
 
-    if cfg.MODEL.TYPE == "unet3plus_deepsup_cgm":
-        raise ValueError(
-            "UNet3+ with Deep Supervision and Classification Guided Module"
-            "\nModel exist but training script is not supported for this variant"
-            "please choose other variants from config file"
-        )
-
     if cfg.USE_MULTI_GPUS.VALUE:
         # change number of visible gpus for training
         set_gpus(cfg.USE_MULTI_GPUS.GPU_IDS)
@@ -105,6 +98,8 @@ def train(cfg: DictConfig):
             batch_images, batch_masks = batch_images.to(device), batch_masks.to(device)
             optimizer.zero_grad()
             outputs = model(batch_images)
+            if model.deep_supervision:
+                batch_masks = batch_masks.repeat(5, 1, 1, 1)
             loss = criterion(batch_masks, outputs)
             loss.backward()
             optimizer.step()
