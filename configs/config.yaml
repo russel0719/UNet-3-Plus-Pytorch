@@ -25,7 +25,7 @@ DATASET:
 
 MODEL:
     # available variants are unet3plus, unet3plus_deepsup, unet3plus_deepsup_cgm
-    TYPE: "unet3plus_deepsup_cgm"
+    TYPE: "unet3plus_deepsup"
     WEIGHTS_FILE_NAME: model_${MODEL.TYPE}
 
 SEED: 5 # for result's reproducibility
