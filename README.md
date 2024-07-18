@@ -115,10 +115,10 @@ python train.py MODEL.TYPE=unet3plus
 
 To inference a model call `predict.py` with required model type and configurations .
 
-e.g. To train on base model run
+e.g. To inference on base model run
 
 ```
-python train.py MODEL.TYPE=unet3plus
+python predict.py MODEL.TYPE=unet3plus
 ```
 
 ## Acknowledgement
