@@ -103,7 +103,7 @@ unet_3P_deep_sup_cgm = UNet3Plus(INPUT_SHAPE, OUTPUT_CHANNELS, deep_supervision=
 
 ### Training
 
-To train a model call `train.py` with required model type and configurations .
+To train a model on train dataset call `train.py` with required model type and configurations .
 
 e.g. To train on base model run
 
@@ -113,7 +113,7 @@ python train.py MODEL.TYPE=unet3plus
 
 ### Inferencing
 
-To inference a model call `predict.py` with required model type and configurations .
+To inference a model on valid dataset call `predict.py` with required model type and configurations .
 
 e.g. To inference on base model run
 
