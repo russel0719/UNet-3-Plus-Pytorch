@@ -22,6 +22,9 @@ DATASET:
     VAL:
         IMAGES_PATH: "/data/val/images"
         MASK_PATH: "/data/val/mask"
+    TEST:
+        IMAGES_PATH: "/data/test/images"
+        MASK_PATH: None
 
 MODEL:
     # available variants are unet3plus, unet3plus_deepsup, unet3plus_deepsup_cgm
@@ -82,6 +85,8 @@ PREPROCESS_DATA:
         TRAIN:
             VALUE: True
         VAL:
+            VALUE: False
+        TEST:
             VALUE: False
 
 USE_MULTI_GPUS:

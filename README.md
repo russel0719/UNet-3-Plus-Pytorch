@@ -111,6 +111,16 @@ e.g. To train on base model run
 python train.py MODEL.TYPE=unet3plus
 ```
 
+### Validation
+
+To validate a model on valid dataset call `validate.py` with required model type and configurations .
+
+e.g. To validate on base model and visualize them, run
+
+```
+python validate.py MODEL.TYPE=unet3plus
+```
+
 ### Inferencing
 
 To inference a model on valid dataset call `predict.py` with required model type and configurations .

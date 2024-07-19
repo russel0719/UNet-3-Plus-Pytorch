@@ -14,16 +14,16 @@ from models.model import prepare_model
 
 
 @torch.no_grad()
-def predict(cfg: DictConfig):
+def validate(cfg: DictConfig):
     """
-    Predict and visualize given data
+    Validate and visualize given data
     """
 
     # set batch size to one
     cfg.HYPER_PARAMETERS.BATCH_SIZE = 1
 
     # data generator
-    test_generator = get_data_loader(cfg, mode="TEST")
+    val_generator = get_data_loader(cfg, mode="VAL")
 
     # set device with gpu id
     gpu_id = cfg.GPU_ID
@@ -50,12 +50,12 @@ def predict(cfg: DictConfig):
 
     # check mask are available or not
     mask_available = True
-    if cfg.DATASET.TEST.MASK_PATH is None or \
-            str(cfg.DATASET.TEST.MASK_PATH).lower() == "none":
+    if cfg.DATASET.VAL.MASK_PATH is None or \
+            str(cfg.DATASET.VAL.MASK_PATH).lower() == "none":
         mask_available = False
 
     showed_images = 0
-    for batch_data in test_generator:  # for each batch
+    for batch_data in val_generator:  # for each batch
         batch_images = batch_data[0].to(device)
         if mask_available:
             batch_mask = batch_data[1]
@@ -98,7 +98,7 @@ def main(cfg: DictConfig):
     """
     Read config file and pass to validation method
     """
-    predict(cfg)
+    validate(cfg)
 
 
 if __name__ == "__main__":
