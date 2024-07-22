@@ -66,9 +66,10 @@ def validate(cfg: DictConfig):
         for index in range(len(batch_images)):
 
             image = batch_images[index].cpu().numpy()  # for each image
+            image = image.transpose(1, 2, 0)
             if cfg.SHOW_CENTER_CHANNEL_IMAGE:
                 # for UNet3+ show only center channel as image
-                image = image[1, :, :]
+                image = image[:, :, 1]
 
             # do postprocessing on predicted mask
             prediction = batch_predictions[index]
